@@ -97,6 +97,3 @@ server.listen(PORT, () => {
   console.log('listening on http://localhost:${PORT}');
 });
 
-// graphql(schema, query, resolvers)
-// .then((result)=> console.log(result))
-// .catch((error) => console.log(error));
