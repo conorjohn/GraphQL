@@ -6,14 +6,25 @@ const {
   GraphQLString,
   GraphQLID,
   GraphQLInt,
+  GraphQLList,
   GraphQLBoolean
 } = require('graphql');
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
+const {getVideoById} = require('./src/data');
 
 //setting up express
 const PORT = process.env.PORT || 3000;
 const server = express();
+
+//Attempting to figure out how to add an Array into the returned results from the database
+
+const videoActorArray = new GraphQLObjectType({
+  name: 'actors',
+  fields: {
+    name: 
+  }
+})
 
 const videoType = new GraphQLObjectType({
   name: 'video',
@@ -34,6 +45,10 @@ const videoType = new GraphQLObjectType({
     watch: {
       type: GraphQLBoolean,
       description: 'Whether or not the viewer has watched the video'
+    },
+    actors: {
+      type: new GraphQLList(videoActorArray),
+      description: 'Actors and actresses in the video'
     }
   }
 })
@@ -44,14 +59,15 @@ const queryType = new GraphQLObjectType({
   fields: {
     video:{
       type: videoType,
-      resolve: () => new Promise((resolve) => {
-        resolve({
-          id: 'a',
-          title: 'GraphQL',
-          duration: 180,
-          watched: false
-        })
-      })
+      args: {
+        id: {
+          type:GraphQLID,
+          description: 'The id of the video.',
+        },
+      },
+        resolve: (_, args) => {
+          return getVideoById(args.id);
+      }
     }
   }
 });
@@ -59,22 +75,6 @@ const queryType = new GraphQLObjectType({
 const schema = new GraphQLSchema({
   query: queryType,
 });
-
-const videoA = {
-  id: 'a',
-  title: 'Create a GraphQL Schema',
-  duration: 120,
-  watched: true
-};
-
-const videoB = {
-  id: 'b',
-  title: 'Angular CLI',
-  duration: 240,
-  watched: false
-};
-
-const videos = [videoA, videoB];
 
 //resolver
 // const resolvers = {
@@ -93,7 +93,8 @@ server.use('/graphql', graphqlHTTP({
   graphiql:true,
 }));
 
-server.listen(PORT, () => {
+server.listen(PORT, (PORT) => {
+  console.log(PORT);
   console.log('listening on http://localhost:${PORT}');
 });
 
