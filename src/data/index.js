@@ -2,7 +2,7 @@ const videoA = {
   id: 'a',
   title: 'Create a GraphQL Schema',
   duration: 120,
-  actors:['Christian Bale', 'Scarlett Johanson', 'Robert Downey Jr.'],
+  // actors:['Christian Bale', 'Scarlett Johanson', 'Robert Downey Jr.'],
   watched: true
 };
 
@@ -10,7 +10,7 @@ const videoB = {
   id: 'b',
   title: 'Angular CLI',
   duration: 240,
-  actors:['Ewan McGregor', 'Natalie Portman', 'Chris Hemsworth'],
+  // actors:['Ewan McGregor', 'Natalie Portman', 'Chris Hemsworth'],
   watched: false
 };
 

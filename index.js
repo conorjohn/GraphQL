@@ -5,6 +5,7 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLID,
+  GraphQLNonNull,
   GraphQLInt,
   GraphQLList,
   GraphQLBoolean
@@ -18,13 +19,13 @@ const PORT = process.env.PORT || 3000;
 const server = express();
 
 //Attempting to figure out how to add an Array into the returned results from the database
-
-const videoActorArray = new GraphQLObjectType({
-  name: 'actors',
-  fields: {
-    name: 
-  }
-})
+ 
+// const videoActorArray = new GraphQLObjectType({
+//   name: 'actors',
+//   fields: {
+//     name: 
+//   }
+// })
 
 const videoType = new GraphQLObjectType({
   name: 'video',
@@ -46,10 +47,10 @@ const videoType = new GraphQLObjectType({
       type: GraphQLBoolean,
       description: 'Whether or not the viewer has watched the video'
     },
-    actors: {
-      type: new GraphQLList(videoActorArray),
-      description: 'Actors and actresses in the video'
-    }
+    // actors: {
+    //   type: new GraphQLList(videoActorArray),
+    //   description: 'Actors and actresses in the video'
+    // }
   }
 })
 
@@ -61,7 +62,8 @@ const queryType = new GraphQLObjectType({
       type: videoType,
       args: {
         id: {
-          type:GraphQLID,
+          //instead of just delcaring a type, this defines the required type
+          type:new GraphQLNonNull(GraphQLID),
           description: 'The id of the video.',
         },
       },
