@@ -14,26 +14,31 @@ const {
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const {getVideoById, getVideos, createVideo } = require('./src/data');
+const nodeInterface = require('./src/node');
 
 //setting up express
 const PORT = process.env.PORT || 3000;
 const server = express();
 
-//Attempting to figure out how to add an Array into the returned results from the database
- 
-// const videoActorArray = new GraphQLObjectType({
-//   name: 'actors',
+/**
+    Used as an example
+**/
+// const instructorType = new GraphQLObjectType({
 //   fields: {
-//     name: 
-//   }
+//     id: {
+//       type: GraphQLID,
+//       description: 'The ID of the video.',
+//     },
+//   },
+//   interfaces: [nodeInterface],
 // })
 
 const videoType = new GraphQLObjectType({
-  name: 'video',
-  description: 'a video on egghead',
+  name: 'Video',
+  description: 'A video on egghead',
   fields: {
     id: {
-      type: GraphQLID,
+      type: new GraphQLNonNull(GraphQLID),
       description:'The id of the video'
     },
     title: {
@@ -47,13 +52,12 @@ const videoType = new GraphQLObjectType({
     watch: {
       type: GraphQLBoolean,
       description: 'Whether or not the viewer has watched the video'
-    }
-    // actors: {
-    //   type: new GraphQLList(videoActorArray),
-    //   description: 'Actors and actresses in the video'
-    // }
-  }
+    },
+  },
+  interfaces: [nodeInterface],
 })
+
+exports.videoType = videoType;
 
 const queryType = new GraphQLObjectType({
   name:'QueryType',
