@@ -14,8 +14,9 @@ const {
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const {getVideoById, getVideos, createVideo } = require('./src/data');
-const nodeInterface = require('./src/node');
-
+// const nodeInterface = require('./src/node');
+const {globalIdField} = require('relay');
+const {nodeInterface, nodeField} = require('./src/node');
 //setting up express
 const PORT = process.env.PORT || 3000;
 const server = express();
@@ -37,10 +38,7 @@ const videoType = new GraphQLObjectType({
   name: 'Video',
   description: 'A video on egghead',
   fields: {
-    id: {
-      type: new GraphQLNonNull(GraphQLID),
-      description:'The id of the video'
-    },
+    id: globalIdField(),
     title: {
       type: GraphQLString,
       description: 'The title of the video'
@@ -63,6 +61,7 @@ const queryType = new GraphQLObjectType({
   name:'QueryType',
   description: 'The root query type',
   fields: {
+    node: nodeField,
     //this allows me to return array of videos
     videos: {
       type: new GraphQLList(videoType),
