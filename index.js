@@ -15,7 +15,7 @@ const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const {getVideoById, getVideos, createVideo } = require('./src/data');
 // const nodeInterface = require('./src/node');
-const {globalIdField} = require('relay');
+const {globalIdField} = require('graphql-relay');
 const {nodeInterface, nodeField} = require('./src/node');
 //setting up express
 const PORT = process.env.PORT || 3000;

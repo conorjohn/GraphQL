@@ -1,6 +1,6 @@
 'use strict';
 
-const {nodeDefinitions, fromGlobalId} = require('relay');
+const {nodeDefinitions, fromGlobalId} = require('graphql-relay');
 const{
 	GraphQLInterfaceType,
 	GraphQLNonNull,
@@ -16,8 +16,7 @@ const {nodeInterface, nodeField} = nodeDefinitions(
 		if(object.title){
 			return videoType;
 		}
-			return	null;
-		
+		return	null;
 	});
 const {videoType} = require('../');
 
