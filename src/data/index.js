@@ -13,6 +13,12 @@ const videoB = {
   // actors:['Ewan McGregor', 'Natalie Portman', 'Chris Hemsworth'],
   watched: false
 };
+const getObjectbyId = (type, id) => {
+	const types = {
+		video: getVideoById,
+	}
+	return types[type](id);
+}
 
 const videos = [videoA, videoB];
 
@@ -42,3 +48,4 @@ const getVideos = () => new Promise((resolve) => resolve(videos));
 exports.createVideo	= createVideo;
 exports.getVideoById = getVideoById;
 exports.getVideos = getVideos;
+exports.getObjectbyId = getObjectbyId;
