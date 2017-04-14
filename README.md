@@ -21,4 +21,17 @@ this is how you use the node relay
     }
   }
 }
+
+after converting graphql list type to a relay connection type, this is the sort of query you need to run 
+
+{
+	videos(first: 1) {
+    edges{
+      node{
+        title
+      }
+    }
+  }
+}
+
 " 

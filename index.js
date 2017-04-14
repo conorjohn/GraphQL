@@ -15,14 +15,14 @@ const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const {getVideoById, getVideos, createVideo } = require('./src/data');
 
-const {globalIdField} = require('graphql-relay');
+const {globalIdField, connectionDefinitions, connectionFromPromisedArray, connectionArgs} = require('graphql-relay');
 const {nodeInterface, nodeField} = require('./src/node');
 
 //setting up express
 const PORT = process.env.PORT || 3000;
 const server = express();
 
-const videoType = new GraphQLObjectType({
+const VideoType = new GraphQLObjectType({
   name: 'Video',
   description: 'A video on egghead',
   fields: {
@@ -43,6 +43,18 @@ const videoType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
+const {connectionType: VideoConnection } = connectionDefinitions({
+  nodeType:  VideoType,
+  connectionsFields: () => ({
+    totalCount: {
+      type: GraphQLInt,
+      description: 'A count of the total number of objects in this connection',
+      resolve: (conn) => {
+        return conn.edges.length;
+      }
+    }
+  })
+})
 
 const queryType = new GraphQLObjectType({
   name:'QueryType',
@@ -51,11 +63,15 @@ const queryType = new GraphQLObjectType({
     node: nodeField,
     //this allows me to return array of videos
     videos: {
-      type: new GraphQLList(videoType),
-      resolve: getVideos //can also be written as () => getVideos()
+      type: VideoConnection,
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray (
+        getVideos(),
+        args 
+      ),    
     },
     video:{
-      type: videoType,
+      type: VideoType,
       args: {
         id: {
           //instead of just delcaring a type, this defines the required type
@@ -69,6 +85,10 @@ const queryType = new GraphQLObjectType({
     }
   }
 });
+
+
+
+
 const videoInputType = new GraphQLInputObjectType({
   name: 'VideoInput',
   fields: {
@@ -91,7 +111,7 @@ const mutationType   = new GraphQLObjectType ({
   description: 'The root Mutation type.',
   fields: {
     createVideo: {
-      type: videoType,
+      type: VideoType,
       args: {
         video: {
           type: new GraphQLNonNull(videoInputType),
@@ -104,7 +124,7 @@ const mutationType   = new GraphQLObjectType ({
     },
   },
 })
-exports.videoType = videoType;
+exports.VideoType = VideoType;
 
 const schema = new GraphQLSchema({
   query: queryType,
