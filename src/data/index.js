@@ -13,14 +13,9 @@ const videoB = {
   // actors:['Ewan McGregor', 'Natalie Portman', 'Chris Hemsworth'],
   watched: false
 };
-const getObjectbyId = (type, id) => {
-	const types = {
-		video: getVideoById,
-	}
-	return types[type](id);
-}
 
 const videos = [videoA, videoB];
+const getVideos = () => new Promise((resolve) => resolve(videos));
 
 const getVideoById = (id) => new Promise((resolve) => {
 	const [video] = videos.filter((video) => {
@@ -43,9 +38,15 @@ const createVideo = ({ title, duration, released }) => {
 	return video;
 };
 
-const getVideos = () => new Promise((resolve) => resolve(videos));
+const getObjectById = (type, id) => {
+	const types = {
+		video: getVideoById,
+	};
+
+	return types[type](id);
+}
 
 exports.createVideo	= createVideo;
 exports.getVideoById = getVideoById;
 exports.getVideos = getVideos;
-exports.getObjectbyId = getObjectbyId;
+exports.getObjectById = getObjectById;

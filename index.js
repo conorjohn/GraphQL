@@ -14,25 +14,13 @@ const {
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const {getVideoById, getVideos, createVideo } = require('./src/data');
-// const nodeInterface = require('./src/node');
+
 const {globalIdField} = require('graphql-relay');
 const {nodeInterface, nodeField} = require('./src/node');
+
 //setting up express
 const PORT = process.env.PORT || 3000;
 const server = express();
-
-/**
-    Used as an example
-**/
-// const instructorType = new GraphQLObjectType({
-//   fields: {
-//     id: {
-//       type: GraphQLID,
-//       description: 'The ID of the video.',
-//     },
-//   },
-//   interfaces: [nodeInterface],
-// })
 
 const videoType = new GraphQLObjectType({
   name: 'Video',
@@ -55,7 +43,6 @@ const videoType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
-exports.videoType = videoType;
 
 const queryType = new GraphQLObjectType({
   name:'QueryType',
@@ -117,6 +104,7 @@ const mutationType   = new GraphQLObjectType ({
     },
   },
 })
+exports.videoType = videoType;
 
 const schema = new GraphQLSchema({
   query: queryType,
@@ -129,7 +117,6 @@ server.use('/graphql', graphqlHTTP({
 }));
 
 server.listen(PORT, (PORT) => {
-  console.log(PORT);
-  console.log('listening on http://localhost:${PORT}');
+  console.log('listening on http://localhost:'+PORT);
 });
 

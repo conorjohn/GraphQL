@@ -12,4 +12,13 @@ videos{
 }
 }
 for a result of the titles of the stored videos 
+
+this is how you use the node relay
+{
+  node (id: "VmlkZW86YQ==") {
+    ... on Video {
+      title
+    }
+  }
+}
 " 
